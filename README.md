@@ -1,2 +1,2 @@
-FrontendBundle
+Togu CMS FrontendBundle
 ==============
