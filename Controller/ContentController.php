@@ -83,7 +83,7 @@ class ContentController extends BaseContentController
 	        );
 		}
 
-        return $this->renderResponse('ToguFrontendBundle:Default:index.html.twig', $params);
+        return $this->renderResponse('ApplicationToguApplicationModelsBundle:Default:index.html.twig', $params);
     }
 
     protected function getView($params) {
