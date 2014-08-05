@@ -7,6 +7,8 @@
     <parameters>
         <parameter key="togu.frontend.controller.class">Togu\FrontendBundle\Controller\ContentController</parameter>
         <parameter key="togu.frontend.data.formatter.class">Togu\FrontendBundle\Data\Formatter</parameter>
+		<parameter key="togu.frontend.apicontroller.class">Togu\FrontendBundle\Controller\ApiController</parameter>
+        
     </parameters>
 
     <services>
@@ -32,7 +34,17 @@
             <tag name="doctrine_phpcr.initializer"/>
         </service>
         
-        
+		<service id="togu.frontend.apicontroller" class="%togu.frontend.apicontroller.class%">
+			        <call method="setContainer">
+	             <argument type="service" id="service_container" />
+	        </call>        
+	        <call method="setFormatter">
+	             <argument type="service" id="togu.frontend.data.formatter" />
+	        </call>        
+	        <call method="setMediaManager">
+	             <argument type="service" id="sonata.media.manager.media" />
+	        </call>        
+		</service>
         
     </services>
   
