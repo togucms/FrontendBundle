@@ -22,30 +22,26 @@
 namespace Togu\FrontendBundle\Data;
 
 use Togu\AnnotationBundle\Data\AnnotationProcessor;
-use Sonata\MediaBundle\Model\MediaManagerInterface;
-use Sonata\MediaBundle\Provider\Pool;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 
 class Formatter {
 	private $processor;
-	private $mediaManager;
-	private $mediaPool;
-	private $urlGenerator;
 
 	/**
 	 *
 	 * @param AnnotationProcessor $processor
 	 * @param UrlGeneratorInterface $urlGenerator
 	 */
-	public function __construct(AnnotationProcessor $processor, UrlGeneratorInterface $urlGenerator) {
+	public function __construct(AnnotationProcessor $processor) {
 		$this->processor = $processor;
-		$this->urlGenerator = $urlGenerator;
 	}
 
-	protected function resolveLinks(&$links) {
+	/**
+	 *
+	 * @param array $links
+	 */
+	protected function convertLinks(array &$links) {
 		foreach ($links as $id => $value) {
-			$links[$id] = $this->urlGenerator->generate($value);
+			$links[$id] = true;
 		}
 	}
 
@@ -76,22 +72,12 @@ class Formatter {
 		}
 
 		foreach ($entities as $entity) {
-			if($entity instanceof \Application\Togu\ApplicationModelsBundle\Document\Page) {
-				$data['links'][$entity->getId()] = $entity;
-			}
-
 			$this->processor->getAllObjects($entity, $data['models']);
 			$this->processor->getFieldValuesOfType($entity, 'image', $data['images']);
 			$this->processor->getFieldValuesOfType($entity, 'link', $data['links']);
-
-			if($entity instanceof \Application\Togu\ApplicationModelsBundle\Document\Page) {
-				$data['links'][$entity->getId()] = $entity;
-			}
 		}
 
-		array_merge($data['models'], $data['links']);
-
-		$this->resolveLinks($data['links']);
+		$this->convertLinks($data['links']);
 
 		return $data;
 	}

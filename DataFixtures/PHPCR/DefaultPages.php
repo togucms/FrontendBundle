@@ -37,6 +37,8 @@ class DefaultPages extends ContainerAware implements FixtureInterface, OrderedFi
 	protected $modelLoader;
 	protected $mediaManager;
 	protected $rootData;
+	protected $sectionConfigs = array();
+	protected $links = array();
 
     /**
      * {@inheritDoc}
@@ -69,6 +71,11 @@ class DefaultPages extends ContainerAware implements FixtureInterface, OrderedFi
 		}
 
 
+		foreach ($this->links as $link) {
+			$section = $this->sectionConfigs[$link['value']];
+			$this->setValue($link['instance'], $link['fieldName'], $section->getPage());
+		}
+
         $manager->flush();
     }
 
@@ -85,6 +92,13 @@ class DefaultPages extends ContainerAware implements FixtureInterface, OrderedFi
 			switch ($fieldType) {
 				case "image":
 					$this->setValue($instance, $fieldName, $this->mediaManager->find($value));
+					break;
+				case "link":
+					$this->links[] = array(
+						"instance" => $instance,
+						"fieldName" => $fieldName,
+						"value" => $value
+					);
 					break;
 				case "reference":
 					foreach ($value as $child) {
@@ -105,6 +119,9 @@ class DefaultPages extends ContainerAware implements FixtureInterface, OrderedFi
 					$sectionConfig->setText($config['_section']['title']);
 					$sectionConfig->setLeaf($config['_section']['leaf']);
 					$sectionConfig->setType($type);
+					if($sectionConfig->getLeaf() === true) {
+						$this->sectionConfigs[$sectionConfig->getText()] = $sectionConfig;
+					}
 					break;
 				default:
 					$this->setValue($instance, $fieldName, $value);

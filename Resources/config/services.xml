@@ -23,7 +23,6 @@
         
         <service id="togu.frontend.data.formatter" class="%togu.frontend.data.formatter.class%" public="true">
         	<argument type="service" id="togu.annotation.processor" />
-        	<argument type="service" id="cmf_routing.generator" />
         </service>
         
         <service id="togu.frontend.routes.initializer" class="Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer">
