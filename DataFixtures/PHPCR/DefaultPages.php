@@ -70,7 +70,7 @@ class DefaultPages extends ContainerAware implements FixtureInterface, OrderedFi
 	        $this->createModel($section, $rootModel);
 		}
 
-
+        $manager->flush();
 		foreach ($this->links as $link) {
 			$section = $this->sectionConfigs[$link['value']];
 			$this->setValue($link['instance'], $link['fieldName'], $section->getPage());
